@@ -1,0 +1,169 @@
+schema: '2.0'
+stages:
+  explore:
+    cmd: .\.venv\Scripts\python.exe src/explore_dataset.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 3600c5fb31b9305c58d4271409f515ce.dir
+      size: 553444899
+      nfiles: 423
+    - path: src/config.py
+      hash: md5
+      md5: 5f2fdbc422e5cd5a108da146af15c646
+      size: 2494
+    - path: src/explore_dataset.py
+      hash: md5
+      md5: ed14823a9b3dd9d8a2a1f9a6a2d6ecb4
+      size: 5399
+    outs:
+    - path: results/dataset_report.json
+      hash: md5
+      md5: 63c3ee8f783ed14e36051f0574933d06
+      size: 926
+  preprocess:
+    cmd: .\.venv\Scripts\python.exe src/preprocess.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 3600c5fb31b9305c58d4271409f515ce.dir
+      size: 553444899
+      nfiles: 423
+    - path: results/dataset_report.json
+      hash: md5
+      md5: 63c3ee8f783ed14e36051f0574933d06
+      size: 926
+    - path: src/config.py
+      hash: md5
+      md5: 5f2fdbc422e5cd5a108da146af15c646
+      size: 2494
+    - path: src/preprocess.py
+      hash: md5
+      md5: 2ab7253612c21c0dcddda6a8b7529e33
+      size: 8078
+    outs:
+    - path: data/processed/metadata_clean.csv
+      hash: md5
+      md5: 6880cf156254818a7976f175668cff24
+      size: 424904
+  split:
+    cmd: .\.venv\Scripts\python.exe src/make_splits.py
+    deps:
+    - path: data/processed/metadata_clean.csv
+      hash: md5
+      md5: 6880cf156254818a7976f175668cff24
+      size: 424904
+    - path: src/config.py
+      hash: md5
+      md5: 5f2fdbc422e5cd5a108da146af15c646
+      size: 2494
+    - path: src/make_splits.py
+      hash: md5
+      md5: b346cb6d0be2ffc1b00420b29c3424e0
+      size: 3210
+    outs:
+    - path: data/splits/test.csv
+      hash: md5
+      md5: 8dde2586480f5a738fe7376525532563
+      size: 64063
+    - path: data/splits/train.csv
+      hash: md5
+      md5: e63e6ddd8e7826c2ca1740ede72b5cc7
+      size: 298607
+    - path: data/splits/val.csv
+      hash: md5
+      md5: cd5ef781f3cd9b12f8109accdcb71a33
+      size: 62388
+  baseline_text:
+    cmd: .\.venv\Scripts\python.exe src/baseline_text.py
+    deps:
+    - path: data/splits/test.csv
+      hash: md5
+      md5: 8dde2586480f5a738fe7376525532563
+      size: 64063
+    - path: data/splits/train.csv
+      hash: md5
+      md5: e63e6ddd8e7826c2ca1740ede72b5cc7
+      size: 298607
+    - path: data/splits/val.csv
+      hash: md5
+      md5: cd5ef781f3cd9b12f8109accdcb71a33
+      size: 62388
+    - path: src/baseline_text.py
+      hash: md5
+      md5: 200529eb02b4d28d8b15415847b9352e
+      size: 3514
+    - path: src/config.py
+      hash: md5
+      md5: 5f2fdbc422e5cd5a108da146af15c646
+      size: 2494
+    outs:
+    - path: results/baseline_text_metrics.json
+      hash: md5
+      md5: 5ac94d991292c6fd1f52f5dfc5c82e58
+      size: 1131
+  baseline_audio:
+    cmd: .\.venv\Scripts\python.exe src/baseline_audio.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 3600c5fb31b9305c58d4271409f515ce.dir
+      size: 553444899
+      nfiles: 423
+    - path: data/splits/test.csv
+      hash: md5
+      md5: 8dde2586480f5a738fe7376525532563
+      size: 64063
+    - path: data/splits/train.csv
+      hash: md5
+      md5: e63e6ddd8e7826c2ca1740ede72b5cc7
+      size: 298607
+    - path: data/splits/val.csv
+      hash: md5
+      md5: cd5ef781f3cd9b12f8109accdcb71a33
+      size: 62388
+    - path: src/baseline_audio.py
+      hash: md5
+      md5: 9785da2ec73cbaa8bb0ef74b252b424c
+      size: 6216
+    - path: src/config.py
+      hash: md5
+      md5: 5f2fdbc422e5cd5a108da146af15c646
+      size: 2494
+    outs:
+    - path: results/baseline_audio_metrics.json
+      hash: md5
+      md5: c3c1641ede02837f788254d9c1e2772f
+      size: 1030
+  train_final:
+    cmd: .\.venv\Scripts\python.exe src/train_final_model.py
+    deps:
+    - path: data/splits/test.csv
+      hash: md5
+      md5: 8dde2586480f5a738fe7376525532563
+      size: 64063
+    - path: data/splits/train.csv
+      hash: md5
+      md5: e63e6ddd8e7826c2ca1740ede72b5cc7
+      size: 298607
+    - path: data/splits/val.csv
+      hash: md5
+      md5: cd5ef781f3cd9b12f8109accdcb71a33
+      size: 62388
+    - path: src/config.py
+      hash: md5
+      md5: 5f2fdbc422e5cd5a108da146af15c646
+      size: 2494
+    - path: src/train_final_model.py
+      hash: md5
+      md5: 3e7630c4220ee25a8a59a0276b3dcfb8
+      size: 3756
+    outs:
+    - path: models/modele.pkl
+      hash: md5
+      md5: e38d6ec228de4c8f674c6f32a6f9a11c
+      size: 660628
+    - path: models/modele_metadata.json
+      hash: md5
+      md5: a6933dc4f2c9b498f079be6e3fb43b76
+      size: 891

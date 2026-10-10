@@ -1,0 +1,66 @@
+﻿
+stages:
+  explore:
+    cmd: .\.venv\Scripts\python.exe src/explore_dataset.py
+    deps:
+      - src/explore_dataset.py
+      - src/config.py
+      - data/raw
+    outs:
+      - results/dataset_report.json
+
+  preprocess:
+    cmd: .\.venv\Scripts\python.exe src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - src/config.py
+      - data/raw
+      - results/dataset_report.json
+    outs:
+      - data/processed/metadata_clean.csv
+
+  split:
+    cmd: .\.venv\Scripts\python.exe src/make_splits.py
+    deps:
+      - src/make_splits.py
+      - src/config.py
+      - data/processed/metadata_clean.csv
+    outs:
+      - data/splits/train.csv
+      - data/splits/val.csv
+      - data/splits/test.csv
+
+  baseline_text:
+    cmd: .\.venv\Scripts\python.exe src/baseline_text.py
+    deps:
+      - src/baseline_text.py
+      - src/config.py
+      - data/splits/train.csv
+      - data/splits/val.csv
+      - data/splits/test.csv
+    metrics:
+      - results/baseline_text_metrics.json
+
+  baseline_audio:
+    cmd: .\.venv\Scripts\python.exe src/baseline_audio.py
+    deps:
+      - src/baseline_audio.py
+      - src/config.py
+      - data/raw
+      - data/splits/train.csv
+      - data/splits/val.csv
+      - data/splits/test.csv
+    metrics:
+      - results/baseline_audio_metrics.json
+
+  train_final:
+    cmd: .\.venv\Scripts\python.exe src/train_final_model.py
+    deps:
+      - src/train_final_model.py
+      - src/config.py
+      - data/splits/train.csv
+      - data/splits/val.csv
+      - data/splits/test.csv
+    outs:
+      - models/modele.pkl
+      - models/modele_metadata.json

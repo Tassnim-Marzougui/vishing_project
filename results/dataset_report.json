@@ -1,0 +1,38 @@
+{
+  "raw_dir": "C:\\Users\\HP\\Desktop\\ing5\\projet\\vishing_project\\data\\raw",
+  "n_tabular_files": 1,
+  "n_audio_files": 422,
+  "audio_extensions": {
+    ".wav": 422
+  },
+  "main_table_file": "arabic_scam_dataset_complete.xlsx",
+  "shape": [
+    448,
+    18
+  ],
+  "columns": [
+    "conversation_id",
+    "full_conversation",
+    "caller_turn_1",
+    "receiver_turn_1",
+    "caller_turn_2",
+    "receiver_turn_2",
+    "caller_turn_3",
+    "label",
+    "category",
+    "dialect",
+    "urgency_score",
+    "sensitive_info_requests",
+    "financial_pressure_score",
+    "threat_score",
+    "impersonation_score",
+    "conversation_length",
+    "word_count",
+    "label_binary"
+  ],
+  "detected_label_col": "label_binary",
+  "detected_dialect_col": "dialect",
+  "detected_transcript_col": "full_conversation",
+  "detected_filename_col": null,
+  "detected_speaker_col": "conversation_id"
+}
