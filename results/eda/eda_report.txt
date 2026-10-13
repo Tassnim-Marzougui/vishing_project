@@ -1,0 +1,146 @@
+
+============================================================
+1. Qualité des données
+============================================================
+Lignes : 448
+Colonnes : ['conversation_id', 'full_conversation', 'caller_turn_1', 'receiver_turn_1', 'caller_turn_2', 'receiver_turn_2', 'caller_turn_3', 'label', 'category', 'dialect', 'urgency_score', 'sensitive_info_requests', 'financial_pressure_score', 'threat_score', 'impersonation_score', 'conversation_length', 'word_count', 'label_binary']
+Valeurs manquantes (total) : 0
+Doublons lignes entières : 0
+Doublons full_conversation : 0
+Doublons caller_turn_1 : 12
+Textes vides : 0
+conversation_id uniques : 448
+
+============================================================
+2. Répartition des classes, dialectes, catégories
+============================================================
+label
+scam        246
+not_scam    202
+Name: count, dtype: int64
+
+Pourcentage :
+label
+scam        54.9
+not_scam    45.1
+Name: proportion, dtype: float64
+
+Dialecte x Label :
+label      not_scam  scam
+dialect                  
+Egyptian         36    47
+Gulf             31    41
+Iraqi            13    13
+Jordanian        31    35
+MSA              40    53
+Saudi            13    17
+Sudanese         12    14
+Syrian           13    13
+Yemeni           13    13
+
+Catégorie x Label :
+label                     not_scam  scam
+category                                
+bank_fraud                       0    52
+bank_legitimate                 29     0
+charity_emergency                0    17
+delivery_legitimate             18     0
+delivery_shipping                0    15
+education_legitimate            15     0
+government_impersonation         0    22
+government_legitimate           15     0
+insurance_legitimate            14     0
+investment_crypto                0    20
+job_offer                        0    17
+medical_legitimate              16     0
+personal_family                 17     0
+prize_lottery                    0    35
+realestate_legitimate           14     0
+rental_realestate                0    16
+restaurant_legitimate           15     0
+romance_social                   0    17
+service_legitimate              17     0
+sim_whatsapp                     0    16
+tech_support                     0    19
+telecom_legitimate              16     0
+work_legitimate                 16     0
+
+============================================================
+3. Longueur et scores par label
+============================================================
+label                     not_scam    scam
+word_count                   34.71   48.20
+conversation_length         213.18  286.42
+urgency_score                 0.12    1.01
+sensitive_info_requests       0.00    0.42
+financial_pressure_score      0.26    1.90
+threat_score                  0.00    0.38
+impersonation_score           0.07    0.60
+
+Description globale :
+                          count    mean    std  ...    50%     75%    max
+word_count                448.0   42.12  16.07  ...   41.0   51.00   85.0
+conversation_length       448.0  253.40  89.82  ...  247.0  302.25  519.0
+urgency_score             448.0    0.61   0.92  ...    0.0    1.00    5.0
+sensitive_info_requests   448.0    0.23   0.58  ...    0.0    0.00    2.0
+financial_pressure_score  448.0    1.16   1.37  ...    1.0    2.00    5.0
+threat_score              448.0    0.21   0.53  ...    0.0    0.00    3.0
+impersonation_score       448.0    0.36   0.59  ...    0.0    1.00    2.0
+
+[7 rows x 8 columns]
+
+============================================================
+4. Corrélation entre variables numériques et label
+============================================================
+financial_pressure_score    0.599
+urgency_score               0.479
+impersonation_score         0.448
+word_count                  0.418
+conversation_length         0.406
+sensitive_info_requests     0.366
+threat_score                0.361
+Name: label_binary, dtype: float64
+
+============================================================
+5. Mots les plus fréquents par classe
+============================================================
+scam [('ألف', 105), ('حول', 100), ('رسوم', 96), ('آلاف', 71), ('حسابك', 71), ('ريال', 68), ('عشان', 52), ('البنك', 49), ('شركة', 47), ('دينار', 45)]
+not_scam [('تمام', 70), ('الساعة', 60), ('الله', 53), ('شاء', 50), ('شكرا', 46), ('معاك', 34), ('يوم', 33), ('أخوي،', 32), ('مرحبا،', 30), ('العفو', 29)]
+
+============================================================
+6. Mots les plus discriminants (coefficients Logistic Regression)
+============================================================
+Mots -> not_scam : ['الساعة', 'تمام', 'شكرا', 'شاء', 'الله', 'متى', 'العفو', 'جاهز', 'التطبيق', 'يوم', 'طلبك', 'صح؟']
+Mots -> scam     : ['حول', 'رسوم', 'حسابك', 'ألف', 'آلاف', 'ريال', 'عشان', 'ليش', 'الرمز', 'مشكلة', 'تلاف', 'تحديث']
+
+============================================================
+7. Quasi-doublons (fuite possible entre train et test)
+============================================================
+Conversations avec un voisin similaire > 0.5 : 204 / 448
+Conversations avec un voisin similaire > 0.7 : 25 / 448
+Conversations avec un voisin similaire > 0.8 : 10 / 448
+Conversations avec un voisin similaire > 0.9 : 0 / 448
+
+Le voisin le plus proche a le MÊME label dans 100.0% des cas
+Le voisin le plus proche a la MÊME catégorie dans 95.1% des cas
+
+============================================================
+8. Longueur des tours de parole
+============================================================
+label            not_scam  scam
+caller_turn_1         8.8  11.2
+receiver_turn_1       3.9   3.9
+caller_turn_2         7.7  11.5
+receiver_turn_2       3.3   4.7
+caller_turn_3         6.0  12.0
+
+============================================================
+9. Résumé : ce qu'il faut retenir
+============================================================
+- Classes : {'scam': 246, 'not_scam': 202}
+- Les scams sont plus longs (48 mots vs 35).
+- Aucune catégorie n'est partagée entre scam et not_scam : True
+- Voisin le plus proche de même catégorie : 95.1% -> le modèle reconnaît surtout le SUJET (banque, livraison...), pas seulement la fraude.
+- Limite à écrire dans le rapport : dataset synthétique, vocabulaire très marqué -> score ~1.00.
+
+Graphiques + rapport dans : C:\Users\HP\Desktop\ing5\projet\vishing_project\results\eda
